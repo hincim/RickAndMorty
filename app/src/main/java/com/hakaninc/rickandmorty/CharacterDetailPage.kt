@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,9 +16,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.hakaninc.rickandmorty.repo.PersonDaoRetrofit
+import com.hakaninc.rickandmorty.retrofit.PersonsDaoRetrofit
 
 @Composable
 fun CharacterDetailPage(navController: NavController) {
+
+    LaunchedEffect(key1 = true){
+        PersonDaoRetrofit().getAllPersonsRepo()
+
+    }
 
     Row(modifier = Modifier.fillMaxWidth(),
     horizontalArrangement = Arrangement.Start) {
@@ -53,6 +61,7 @@ fun CharacterDetailPage(navController: NavController) {
         Text(text = "Location:     Earth(C-137)", fontSize = 22.sp)
         Text(text = "Episodes:     1, 2, 3, 4, 5, 6, 22, 51", fontSize = 22.sp)
         Text(text = "Created at \n(in API):    5 May 2017, 09:48:44", fontSize = 22.sp)
+
 
     }
     /*Scaffold(topBar = {
