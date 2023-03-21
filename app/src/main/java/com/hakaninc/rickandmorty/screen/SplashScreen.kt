@@ -1,4 +1,4 @@
-package com.hakaninc.rickandmorty
+package com.hakaninc.rickandmorty.screen
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.hakaninc.rickandmorty.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

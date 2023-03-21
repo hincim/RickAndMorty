@@ -4,7 +4,7 @@ class APIUtils {
 
     companion object{
 
-        val BASE_URL = "https://rickandmortyapi.com/api/"
+        private const val BASE_URL = "https://rickandmortyapi.com/api/"
 
         fun getPersonDao() : PersonsDaoRetrofit{
 

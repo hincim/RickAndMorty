@@ -1,13 +1,12 @@
-package com.hakaninc.rickandmorty
+package com.hakaninc.rickandmorty.screen
 
-import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -15,31 +14,35 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.bumptech.glide.Glide
+import com.hakaninc.rickandmorty.R
 import com.hakaninc.rickandmorty.repo.PersonDaoRetrofit
 import com.hakaninc.rickandmorty.viewmodel.HomePageViewModel
+import com.hakaninc.rickandmorty.viewmodel.UserViewModel
 import com.skydoves.landscapist.glide.GlideImage
 
 @Composable
-fun HomePage(navController: NavController) {
+fun HomePage(navController: NavController,userViewModel: UserViewModel) {
+
 
     val viewModel : HomePageViewModel  = HomePageViewModel()
     val personList = viewModel.personList.observeAsState(listOf())
     val characterList = viewModel.characterList.observeAsState(listOf())
+    val state = PersonDaoRetrofit().state.value
 
     val gender = remember {
         mutableStateOf("")
     }
+    if (state == false){
+        CircularProgressIndicator(color = Color.Blue)
+        Spacer(modifier = Modifier.padding(10.dp))
+        Text(text = "getting information", color = Color.Blue)
+    }
 
     LaunchedEffect(key1 = true){
+
         viewModel.getAllPersons()
         viewModel.getAllCharacter()
         for (c in characterList.value){
@@ -49,7 +52,6 @@ fun HomePage(navController: NavController) {
             if (c.gender!! == "Male"){
                 gender.value = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Blue_male_symbol.svg/2048px-Blue_male_symbol.svg.png"
             }
-
         }
     }
 
@@ -59,7 +61,7 @@ fun HomePage(navController: NavController) {
        Image(painter = painterResource(id = R.drawable.rickandmorty,)
            , contentDescription = "Rick And Morty", alignment = Alignment.Center,
        modifier = Modifier.size(120.dp,120.dp))
-       
+
        LazyRow{
            items(count = personList.value.count(),
            itemContent = {
@@ -103,7 +105,8 @@ fun HomePage(navController: NavController) {
                        .padding(5.dp)
                    ) {
                        Row(modifier = Modifier.clickable {
-                            navController.navigate("character_detail_page")
+                           navController.navigate("character_detail_page")
+                           userViewModel.setUser(character)
                        }) {
                            Row(
                                verticalAlignment = Alignment.CenterVertically,
@@ -116,7 +119,6 @@ fun HomePage(navController: NavController) {
                                    horizontalArrangement = Arrangement.SpaceAround,
                                    modifier = Modifier.fillMaxWidth()
                                ) {
-                                   val activity = (LocalContext.current as Activity)
                                    GlideImage(imageModel = character.image, modifier =
                                    Modifier.size(100.dp,150.dp))
                                    if (character.gender.equals("Male")){
@@ -146,6 +148,7 @@ fun HomePage(navController: NavController) {
        }
    }
 }
+
 
 
 
