@@ -1,7 +1,6 @@
 package com.hakaninc.rickandmorty.repo
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.MutableLiveData
 import com.hakaninc.rickandmorty.entity.*
 import com.hakaninc.rickandmorty.retrofit.APIUtils
@@ -15,13 +14,15 @@ class PersonDaoRetrofit {
     private var personsDaoRetrofit: PersonsDaoRetrofit
     private var personsListRepo = MutableLiveData<ArrayList<Results>>()
     private var characterListRepo = MutableLiveData<ArrayList<ResultsLazyColumn>>()
-    var state = MutableLiveData<Boolean>()
+    private var statePerson = MutableLiveData<String>()
+    private var stateCharacter = MutableLiveData<String>()
 
     init {
         personsDaoRetrofit = APIUtils.getPersonDao()
         personsListRepo = MutableLiveData()
         characterListRepo = MutableLiveData()
-        state = MutableLiveData()
+        statePerson = MutableLiveData()
+        stateCharacter = MutableLiveData()
     }
 
     fun connectingViewModelPerson(): MutableLiveData<ArrayList<Results>>{
@@ -31,10 +32,15 @@ class PersonDaoRetrofit {
     fun connectingViewModelCharacter(): MutableLiveData<ArrayList<ResultsLazyColumn>>{
         return characterListRepo
     }
+    fun connectingViewModelPersonState(): MutableLiveData<String>{
+        return statePerson
+    }
+    fun connectingViewModelCharacterState(): MutableLiveData<String>{
+        return stateCharacter
+    }
 
     fun getAllPersonsRepo() {
 
-        state.value = false
         personsDaoRetrofit.getAllPerson().enqueue(object : Callback<Persons>{
 
             override fun onResponse(
@@ -42,19 +48,16 @@ class PersonDaoRetrofit {
                 response: Response<Persons>?
             ) {
                 personsListRepo.value = response?.body()?.results
-                state.value = true
+
             }
 
             override fun onFailure(call: Call<Persons>?, t: Throwable?) {
-
+                statePerson.value = t?.localizedMessage
             }
-
         })
     }
 
     fun getAllCharacter(){
-
-        state.value = false
 
         personsDaoRetrofit.getAllCharacter().enqueue(object : Callback<Character>{
             override fun onResponse(
@@ -62,13 +65,11 @@ class PersonDaoRetrofit {
                 response: Response<Character>?
             ) {
                 characterListRepo.value = response?.body()?.results
-                state.value = true
-
 
             }
 
             override fun onFailure(call: Call<Character>?, t: Throwable?) {
-
+                stateCharacter.value = t?.message
             }
 
         })
