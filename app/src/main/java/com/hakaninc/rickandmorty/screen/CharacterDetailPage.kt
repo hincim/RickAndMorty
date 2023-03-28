@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -68,7 +70,8 @@ fun CharacterDetailPage(navController: NavController, userViewModel: UserViewMod
             Text(
                 text = "${character.name}", textAlign = TextAlign.Center,
                 fontSize = 22.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily(Font(R.font.avenir_black))
             )
         }
         Row(
@@ -98,13 +101,13 @@ fun CharacterDetailPage(navController: NavController, userViewModel: UserViewMod
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp, fontFamily = FontFamily(Font(R.font.avenir_black))
                 )
                 Text(
                     text =character.status!!,
                     textAlign = TextAlign.Center,
                     color = Color.Black,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_regular))
                 )
             }
             Row (modifier =Modifier.padding(top = 5.dp, start = 20.dp, end = 20.dp).fillMaxWidth(),
@@ -114,13 +117,13 @@ fun CharacterDetailPage(navController: NavController, userViewModel: UserViewMod
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_black))
                 )
                 Text(
                     text =character.species!!,
                     textAlign = TextAlign.Center,
                     color = Color.Black,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_regular))
                 )
             }
             Row (modifier =Modifier.padding(top = 5.dp, start = 20.dp, end = 20.dp).fillMaxWidth(),
@@ -130,13 +133,13 @@ fun CharacterDetailPage(navController: NavController, userViewModel: UserViewMod
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_black))
                 )
                 Text(
                     text =character.gender!!,
                     textAlign = TextAlign.Center,
                     color = Color.Black,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_regular))
                 )
             }
             Row(modifier =Modifier.padding(top = 5.dp, start = 20.dp, end = 20.dp).fillMaxWidth(),
@@ -146,13 +149,13 @@ fun CharacterDetailPage(navController: NavController, userViewModel: UserViewMod
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_black))
                 )
                 Text(
                     text =character.origin?.name!!,
                     textAlign = TextAlign.Center,
                     color = Color.Black,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_regular))
                 )
             }
             Row(modifier =Modifier.padding(top = 5.dp, start = 20.dp, end = 20.dp).fillMaxWidth(),
@@ -162,13 +165,13 @@ fun CharacterDetailPage(navController: NavController, userViewModel: UserViewMod
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_black))
                 )
                 Text(
                     text =character.location?.name!!,
                     textAlign = TextAlign.Center,
                     color = Color.Black,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_regular))
                 )
             }
             Row(modifier =Modifier.padding(top = 5.dp, start = 20.dp, end = 20.dp).fillMaxWidth(),
@@ -178,13 +181,13 @@ fun CharacterDetailPage(navController: NavController, userViewModel: UserViewMod
                     textAlign = TextAlign.Center,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_black))
                 )
                 Text(
                     text =list.toString().removeSurrounding("[", "]"),
                     textAlign = TextAlign.Center,
                     color = Color.Black,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_regular))
                 )
             }
             Row(modifier =Modifier.padding(top = 5.dp, start = 20.dp, end = 20.dp).fillMaxWidth(),
@@ -193,14 +196,16 @@ fun CharacterDetailPage(navController: NavController, userViewModel: UserViewMod
                     text = "Created at \n(in API): ",
                     textAlign = TextAlign.Center,
                     color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,fontFamily = FontFamily(Font(R.font.avenir_black))
                 )
                 Text(
                     text =character.created!!,
                     textAlign = TextAlign.Center,
                     color = Color.Black,
-                    fontSize = 22.sp
+                    fontSize = 22.sp,style = TextStyle(
+                        fontFamily = FontFamily(Font(R.font.avenir_regular)
+                        ), fontWeight = FontWeight.Normal
+                    )
                 )
             }
         }

@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val userViewModel = UserViewModel()
 
-                NavHost(navController = navController, startDestination = "home_page"){
+                NavHost(navController = navController, startDestination = "splash_screen"){
 
                     composable("splash_screen"){
 
