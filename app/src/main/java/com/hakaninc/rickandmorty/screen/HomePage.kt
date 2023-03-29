@@ -14,11 +14,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.hakaninc.rickandmorty.R
-import com.hakaninc.rickandmorty.repo.PersonDaoRetrofit
 import com.hakaninc.rickandmorty.viewmodel.HomePageViewModel
 import com.hakaninc.rickandmorty.viewmodel.UserViewModel
 import com.skydoves.landscapist.glide.GlideImage
@@ -31,6 +31,20 @@ fun HomePage(navController: NavController, userViewModel: UserViewModel) {
     val characterList = viewModel.characterList.observeAsState(listOf())
     val personState= viewModel.personState.observeAsState()
     val characterState = viewModel.characterState.observeAsState()
+
+    val lazyColumnLoading = remember {
+        mutableStateOf(false)
+    }
+    val lazyRowLoading = remember {
+        mutableStateOf(false)
+    }
+
+    if (characterList.value.isNotEmpty()){
+        lazyColumnLoading.value = true
+    }
+    if (personList.value.isNotEmpty()){
+        lazyRowLoading.value = true
+    }
 
     LaunchedEffect(key1 = true) {
 
@@ -64,90 +78,119 @@ fun HomePage(navController: NavController, userViewModel: UserViewModel) {
             items(count = personList.value.count(),
                 itemContent = {
                     val person = personList.value[it]
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .shadow(10.dp),
-                        backgroundColor = Color.White,
 
-                        ) {
-
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
+                    when {
+                        lazyRowLoading.value -> {
+                            Card(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(10.dp)
-                            ) {
+                                    .shadow(10.dp),
+                                backgroundColor = Color.White,
+
+                                ) {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    modifier = Modifier.fillMaxWidth()
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(10.dp)
                                 ) {
-                                    Text(text = "${person.name}")
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text(text = "${person.name}")
+                                    }
                                 }
                             }
-                        }
+
+                        }else ->{
+                        CircularProgressIndicator(
+                            color = colorResource(id = R.color.statusBarColor),
+                            modifier = Modifier
+                                .size(45.dp)
+                                .padding(5.dp)
+                        )
+                    }
+                    }
                 })
         }
         LazyColumn {
             items(count = characterList.value.count(),
                 itemContent = {
                     val character = characterList.value[it]
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp)
-                            .shadow(10.dp),
-                        backgroundColor = Color.White,
-
-                    ) {
-                        Row(modifier = Modifier.clickable {
-                            navController.navigate("character_detail_page")
-                            userViewModel.setUser(character)
-                        }) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
+                    when {
+                        lazyColumnLoading.value ->{
+                            Card(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(10.dp)
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.SpaceAround,
-                                    modifier = Modifier.fillMaxWidth()
+                                    .shadow(10.dp),
+                                backgroundColor = Color.White,
+
                                 ) {
-                                    GlideImage(
-                                        imageModel = character.image, modifier =
-                                        Modifier.size(100.dp, 150.dp)
-                                    )
-                                    when {
-                                        character.gender.equals("Male") -> {
-                                            ImageGender(R.drawable.male,"Male",
-                                                Modifier.size(50.dp, 50.dp))
-                                        }
-                                        character.gender.equals("Female") -> {
-                                            ImageGender(R.drawable.female,"Male",
-                                                Modifier.size(50.dp, 50.dp))
-                                        }
-                                        character.gender.equals("unknown") -> {
-                                            ImageGender(R.drawable.genderless,"unknown",
-                                                Modifier.size(50.dp, 50.dp))
-                                        }
-                                        character.gender.equals("genderless") -> {
-                                            ImageGender(R.drawable.genderless,"genderless",
-                                                Modifier.size(50.dp, 50.dp))
-                                        }
 
+                                Row(modifier = Modifier.clickable {
+                                    navController.navigate("character_detail_page")
+                                    userViewModel.setUser(character)
+                                }) {
+
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(10.dp)
+                                    ) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceAround,
+                                            modifier = Modifier.fillMaxWidth()
+
+                                        ) {
+
+                                            GlideImage(
+                                                imageModel = character.image, modifier =
+                                                Modifier.size(100.dp, 150.dp)
+                                            )
+                                            when {
+
+                                                character.gender.equals("Male") -> {
+                                                    ImageGender(R.drawable.male,"Male",
+                                                        Modifier.size(50.dp, 50.dp))
+                                                }
+                                                character.gender.equals("Female") -> {
+                                                    ImageGender(R.drawable.female,"Male",
+                                                        Modifier.size(50.dp, 50.dp))
+                                                }
+                                                character.gender.equals("unknown") -> {
+                                                    ImageGender(R.drawable.genderless,"unknown",
+                                                        Modifier.size(50.dp, 50.dp))
+                                                }
+                                                character.gender.equals("genderless") -> {
+                                                    ImageGender(R.drawable.genderless,"genderless",
+                                                        Modifier.size(50.dp, 50.dp))
+                                                }
+
+                                            }
+                                            Text(
+                                                text = "${character.name}" +
+                                                        "\n${character.gender}"
+                                            )
+
+                                        }
                                     }
-                                    Text(
-                                        text = "${character.name}" +
-                                                "\n${character.gender}"
-                                    )
-
                                 }
                             }
-                        }
+
+                        }else ->{
+                        CircularProgressIndicator(
+                            color = colorResource(id = R.color.statusBarColor),
+                            modifier = Modifier
+                                .size(45.dp)
+                                .padding(5.dp)
+                        )
+                    }
                     }
                 })
         }
@@ -157,7 +200,7 @@ fun HomePage(navController: NavController, userViewModel: UserViewModel) {
 @Composable
 private fun ImageGender(painter : Int, contentDescription: String, modifier: Modifier) {
     Image(painter = painterResource(id = painter), contentDescription = contentDescription,
-    modifier = modifier)
+        modifier = modifier)
 }
 
 

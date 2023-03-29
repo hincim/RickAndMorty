@@ -27,14 +27,14 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun HelloScreen(navController: NavController) {
     val animatedProgress = remember { Animatable(0f) }
     val image: Painter = painterResource(id = R.drawable.rickandmorty)
 
     LaunchedEffect(key1 = true){
         animatedProgress.animateTo(
             targetValue = 360f,
-            animationSpec = tween(durationMillis = 750)
+            animationSpec = tween(durationMillis = 500)
         )
     }
 
@@ -45,20 +45,20 @@ fun SplashScreen(navController: NavController) {
             Modifier
                 .size(275.dp, 275.dp)
                 .graphicsLayer(rotationY = animatedProgress.value))
-        Text(text = "Welcome!", fontSize = 30.sp, fontWeight = FontWeight.Bold,modifier =
+        Text(text = "Hello!", fontSize = 30.sp, fontWeight = FontWeight.Bold, modifier =
         Modifier.graphicsLayer {
             rotationX = animatedProgress.value
         })
 
-        ChangeScreen{
+        ChangeScreen1{
             navController.navigate("home_page"){
-                popUpTo("splash_screen"){inclusive = true}
+                popUpTo("hello_screen"){inclusive = true}
             }
         }
     }
 }
 @Composable
-fun ChangeScreen(navigateTo: () -> Unit) {
+fun ChangeScreen1(navigateTo: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val delayTime = 3000L
 
